@@ -33,6 +33,27 @@ app.get("/users/:userId", async function (req, res) {
   }
 });
 
+app.get("/users", async function (req, res) {
+  const params = {
+    TableName: USERS_TABLE,
+  };
+
+  try {
+    const { items } = await dynamoDbClient.scan(params).promise();
+    if (items.length >0) {
+      
+      res.json({ items});
+    } else {
+      res
+        .status(404)
+        .json({ error: 'Could not find user with provided "userId"' });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Could not retreive user" });
+  }
+});
+
 app.post("/users", async function (req, res) {
   const { userId, name } = req.body;
   if (typeof userId !== "string") {
