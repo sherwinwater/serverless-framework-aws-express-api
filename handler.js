@@ -54,6 +54,7 @@ app.get("/users", async function (req, res) {
   }
 });
 
+
 app.post("/users", async function (req, res) {
   const { userId, name } = req.body;
   if (typeof userId !== "string") {
